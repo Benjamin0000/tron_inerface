@@ -98,7 +98,9 @@ app.get('/get_balance/:addr', (req, res)=>{
     let address = req.params.addr;
     get_USDT_balance(address).then(balance=>{
         res.send(  JSON.stringify({'bal': balance})  );
-    }).catch(error=>{}); 
+    }).catch(error=>{
+        console.log(error)
+    }); 
 });
 
 app.get('/get_fee/:addr/:pk/:amt', (req, res)=>{
