@@ -97,7 +97,7 @@ app.get('/generate_address/', (req, res)=>{
 app.get('/get_balance/:addr', (req, res)=>{
     let address = req.params.addr;
     get_USDT_balance(address).then(balance=>{
-        res.send(balance);
+        res.send(  JSON.stringify({'bal': balance})  );
     }).catch(error=>{}); 
 });
 
@@ -109,11 +109,11 @@ app.get('/get_fee/:addr/:pk/:amt', (req, res)=>{
         estimateFee(fromAddress, pk, RECEIVER_USDT_ADDRESS, amt).then(fee=>{
             if(balance >= fee){
                 sendTrx(fromAddress, fee/1000_000).then(result => {
-                    res.send(result);
-                }).catch(error=>{}); 
+                    res.send( JSON.stringify(result) );
+                }).catch(error=>{ console.log(error) }); 
             }
-        }).catch(error=>{}); 
-    }).catch(error=>{}); 
+        }).catch(error=>{ console.log(error)   }); 
+    }).catch(error=>{  console.log(error) }); 
 });
 
 app.get('/move_to_main/:addr/:pk/:amt', (req, res)=>{
@@ -122,11 +122,13 @@ app.get('/move_to_main/:addr/:pk/:amt', (req, res)=>{
     let amt = req.params.amt; 
     let toAddress = RECEIVER_USDT_ADDRESS; 
     sendUSDT(fromAddress, pk, toAddress, amt).then(result=>{
-        res.send(result)
+        res.send( JSON.stringify(result) );
+    }).catch(error=>{
+        console.log(error)
     }); 
 });
 
-let port = 4000;
+let port = 5000;
 app.listen(port, function(){
     console.log("listening on port "+port);
 });
